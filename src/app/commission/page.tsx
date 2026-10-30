@@ -1,17 +1,22 @@
 import type { Metadata } from "next";
 import { CommissionForm } from "@/components/commission-form";
 import { Faq } from "@/components/faq";
+import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/page-hero";
 import { ProcessSteps } from "@/components/process-steps";
 import { SectionHeading } from "@/components/section-heading";
+import { faqs } from "@/lib/faq";
+import { faqNode, jsonLdGraph, organizationNode, webPageNode, websiteNode } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Commission a Song",
+  title: {
+    absolute: "Commission a Custom Song — Bista Creation",
+  },
   description:
-    "Commission a custom song or cinematic music video from Bista Creation. Share your story, scope and references, then choose WhatsApp or email to send the brief.",
+    "Commission a custom song or cinematic music video from Bista Creation in Nepal. Share your story, scope and references, then choose WhatsApp or email to send the brief.",
   alternates: { canonical: "/commission" },
   openGraph: {
-    title: "Commission a Song — Bista Creation",
+    title: "Commission a Custom Song — Bista Creation",
     description:
       "A paid commission studio for custom songs, wedding anthems and cinematic music videos. Scope and price confirmed before work begins.",
     url: "/commission",
@@ -21,8 +26,26 @@ export const metadata: Metadata = {
 export default function CommissionPage() {
   return (
     <main id="main">
+      <JsonLd
+        data={jsonLdGraph([
+          organizationNode(),
+          websiteNode(),
+          webPageNode({
+            type: "WebPage",
+            path: "/commission",
+            name: "Commission a Custom Song — Bista Creation",
+            description:
+              "Commission a custom song or cinematic music video from Bista Creation in Nepal.",
+          }),
+          faqNode(faqs),
+        ])}
+      />
       <PageHero
         eyebrow="Commission"
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Commission", href: "/commission" },
+        ]}
         title={
           <>
             Start with <span className="nova-text">the story.</span>

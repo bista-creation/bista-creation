@@ -76,18 +76,20 @@ export async function getYouTubeVideos(): Promise<{
         const json = (await res.json()) as { items?: Array<Record<string, unknown>> };
         const items: YouTubeVideo[] = (json.items ?? []).map((entry) => {
           const snippet = (entry.snippet ?? {}) as Record<string, unknown>;
-          const snippetTitle = text(snippet.title) || "Untitled";
+          const title = text(snippet.title) || "Untitled";
+          const description = text(snippet.description) || undefined;
           const idRecord = entry.id as Record<string, unknown> | undefined;
           const videoId = String(idRecord?.videoId ?? entry.id ?? "");
-          const isShort = snippetTitle.includes("#shorts") || snippetTitle.includes("#short");
+          const isShort = title.includes("#shorts") || title.includes("#short");
           const videoUrl = videoId
             ? `https://www.youtube.com/watch?v=${videoId}`
             : "https://www.youtube.com/@BistaCreationStudio";
           const published = text(snippet.publishedAt) || new Date().toISOString();
-          const id = videoId || snippetTitle;
+          const id = videoId || title;
           return {
             id,
-            title: snippetTitle,
+            title,
+            description,
             publishedAt: published,
             videoUrl,
             isShort,
@@ -117,6 +119,11 @@ export async function getYouTubeVideos(): Promise<{
         (entry) => {
           const videoId = extractVideoId(entry);
           const title = text(getChild(entry, "title")) || "Untitled";
+          const mediaGroup = (getChild(entry, "media:group") ?? {}) as Record<
+            string,
+            unknown
+          >;
+          const description = text(mediaGroup["media:description"]) || undefined;
           const published =
             text(getChild(entry, "published")) || new Date().toISOString();
           const link = text(getChild(entry, "link"));
@@ -126,6 +133,7 @@ export async function getYouTubeVideos(): Promise<{
           return {
             id: videoId || title,
             title,
+            description,
             publishedAt: published,
             videoUrl: fullUrl,
             isShort,

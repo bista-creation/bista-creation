@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Play, Sparkles } from "lucide-react";
 import { AudioVisualizer } from "@/components/audio-visualizer";
 import { site } from "@/lib/site";
@@ -109,11 +110,14 @@ export function Hero({ featured }: Props) {
                 className="glass liquid-edge sheen group block overflow-hidden rounded-[2rem] p-2.5 transition duration-500 hover:-translate-y-1"
               >
                 <div className="relative aspect-video overflow-hidden rounded-[1.55rem]">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={featured.thumbnail}
-                    alt={featured.title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                    alt={`${featured.title} — Bista Creation`}
+                    fill
+                    priority
+                    unoptimized
+                    sizes="(min-width: 1024px) 42vw, 100vw"
+                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/20 to-transparent" />
                   <span className="absolute top-4 left-4 rounded-full border border-white/15 bg-ink-950 px-3 py-1.5 text-[10px] font-semibold tracking-[0.22em] text-gold-200 uppercase">

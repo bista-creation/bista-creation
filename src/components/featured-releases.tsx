@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowUpRight, Play } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
 import { useVideoModal } from "@/components/video-modal";
@@ -40,12 +41,14 @@ export function FeaturedReleases({ videos }: Props) {
                 className="glass liquid-edge sheen group relative overflow-hidden rounded-3xl text-left transition duration-500 hover:-translate-y-1 hover:border-gold-400/35"
               >
                 <div className="relative aspect-video w-full overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={video.thumbnail}
                     alt={video.title}
+                    fill
                     loading="lazy"
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                    unoptimized
+                    sizes="(min-width: 1024px) 30vw, (min-width: 768px) 45vw, 100vw"
+                    className="object-cover transition duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-950 via-ink-950/10 to-transparent opacity-90" />
                   <div className="absolute inset-0 flex items-center justify-center bg-ink-950/20 transition group-hover:bg-ink-950/5">

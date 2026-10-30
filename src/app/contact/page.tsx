@@ -9,16 +9,20 @@ import {
   Sparkles,
 } from "lucide-react";
 import { CtaBand } from "@/components/cta-band";
+import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/page-hero";
 import { site, socials } from "@/lib/site";
+import { jsonLdGraph, organizationNode, webPageNode, websiteNode } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: {
+    absolute: "Contact Bista Creation — Custom Songs & Music Videos",
+  },
   description:
-    "Talk to Bista Creation about a custom song or cinematic music video. Reach the studio on WhatsApp or email, or send a structured brief.",
+    "Talk to Bista Creation in Nepal about a custom song or cinematic music video. Reach the studio on WhatsApp or email, or send a structured brief.",
   alternates: { canonical: "/contact" },
   openGraph: {
-    title: "Contact — Bista Creation",
+    title: "Contact Bista Creation — Custom Songs & Music Videos",
     description:
       "Reach Bista Creation on WhatsApp or email to start a custom song or cinematic music video.",
     url: "/contact",
@@ -37,8 +41,25 @@ const briefItems = [
 export default function ContactPage() {
   return (
     <main id="main">
+      <JsonLd
+        data={jsonLdGraph([
+          organizationNode(),
+          websiteNode(),
+          webPageNode({
+            type: "ContactPage",
+            path: "/contact",
+            name: "Contact Bista Creation — Custom Songs & Music Videos",
+            description:
+              "Reach Bista Creation on WhatsApp or email to start a custom song or cinematic music video.",
+          }),
+        ])}
+      />
       <PageHero
         eyebrow="Contact"
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Contact", href: "/contact" },
+        ]}
         title={
           <>
             Tell us what <span className="nova-text">you&apos;re hearing.</span>

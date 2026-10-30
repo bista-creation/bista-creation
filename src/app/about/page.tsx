@@ -10,17 +10,27 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { CtaBand } from "@/components/cta-band";
+import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/page-hero";
 import { SectionHeading } from "@/components/section-heading";
 import { BistaBadge } from "@/components/logo";
+import {
+  jsonLdGraph,
+  organizationId,
+  organizationNode,
+  webPageNode,
+  websiteNode,
+} from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "The Studio",
+  title: {
+    absolute: "Music Video Studio in Nepal — Bista Creation",
+  },
   description:
     "Bista Creation is an independent Nepal-based studio making cinematic music videos and custom songs with Himalayan soul and next-generation tools.",
   alternates: { canonical: "/about" },
   openGraph: {
-    title: "The Studio — Bista Creation",
+    title: "Music Video Studio in Nepal — Bista Creation",
     description:
       "An independent Nepal-based creative studio making cinematic songs and music videos.",
     url: "/about",
@@ -78,8 +88,26 @@ const facts = [
 export default function AboutPage() {
   return (
     <main id="main">
+      <JsonLd
+        data={jsonLdGraph([
+          organizationNode(),
+          websiteNode(),
+          webPageNode({
+            type: "AboutPage",
+            path: "/about",
+            name: "Music Video Studio in Nepal — Bista Creation",
+            description:
+              "An independent Nepal-based creative studio making cinematic songs and music videos.",
+            aboutId: organizationId,
+          }),
+        ])}
+      />
       <PageHero
         eyebrow="The studio"
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Studio", href: "/about" },
+        ]}
         title={
           <>
             A spark, turned into <span className="nova-text">a studio.</span>

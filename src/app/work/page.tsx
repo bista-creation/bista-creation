@@ -2,21 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight, Facebook, Instagram, Youtube } from "lucide-react";
 import { CtaBand } from "@/components/cta-band";
+import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/page-hero";
 import { WorkGallery } from "@/components/work-gallery";
 import { site } from "@/lib/site";
+import { jsonLdGraph, organizationNode, videoItemListNode, websiteNode } from "@/lib/schema";
 import type { YouTubeVideo } from "@/lib/types";
 import { getYouTubeShorts, getYouTubeVideos } from "@/lib/youtube";
 
 export const metadata: Metadata = {
-  title: "Selected Work",
+  title: {
+    absolute: "Music Videos & Shorts — Bista Creation",
+  },
   description:
-    "Watch Bista Creation's cinematic music videos, Nepali AI remixes and vertical shorts — built with Suno AI Pro and Google Flow.",
+    "Watch Bista Creation's cinematic music videos, Nepali AI remixes and vertical shorts — made in Nepal with Suno AI Pro and Google Flow.",
   alternates: { canonical: "/work" },
   openGraph: {
-    title: "Selected Work — Bista Creation",
+    title: "Music Videos & Shorts — Bista Creation",
     description:
-      "Cinematic music videos, Nepali AI remixes and vertical shorts from the Bista Creation studio.",
+      "Cinematic music videos, Nepali AI remixes and vertical shorts from the Bista Creation studio in Nepal.",
     url: "/work",
   },
 };
@@ -60,8 +64,19 @@ export default async function WorkPage() {
 
   return (
     <main id="main">
+      <JsonLd
+        data={jsonLdGraph([
+          organizationNode(),
+          websiteNode(),
+          videoItemListNode(videos),
+        ])}
+      />
       <PageHero
         eyebrow="Selected work"
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Work", href: "/work" },
+        ]}
         title={
           <>
             Nepali soul. <span className="nova-text">Global sound.</span>

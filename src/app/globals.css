@@ -1,9 +1,8 @@
-@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Cinzel", "Times New Roman", serif;
-  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
+  --font-display: var(--font-cinzel), "Times New Roman", serif;
+  --font-sans: var(--font-jakarta), "Inter", system-ui, sans-serif;
 
   --color-ink-950: #05050a;
   --color-ink-900: #090910;
@@ -37,8 +36,6 @@
 
 @layer base {
   :root {
-    --font-display: "Cinzel", "Times New Roman", serif;
-    --font-sans: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
     --glass-border: rgba(255, 255, 255, 0.12);
   }
 

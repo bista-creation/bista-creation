@@ -10,20 +10,24 @@ import {
   Smartphone,
 } from "lucide-react";
 import { CtaBand } from "@/components/cta-band";
+import { JsonLd } from "@/components/json-ld";
 import { PageHero } from "@/components/page-hero";
 import { ProcessSteps } from "@/components/process-steps";
 import { SectionHeading } from "@/components/section-heading";
 import { site } from "@/lib/site";
+import { jsonLdGraph, organizationNode, serviceCatalogNode, websiteNode } from "@/lib/schema";
 
 export const metadata: Metadata = {
-  title: "Services",
+  title: {
+    absolute: "Custom Songs & Music Video Services — Bista Creation",
+  },
   description:
-    "Custom songs, wedding anthems, cinematic music videos and vertical cuts from Bista Creation — scoped, quoted and delivered with clear milestones.",
+    "Custom songs, wedding anthems, cinematic music videos and vertical cuts from Bista Creation in Nepal — scoped, quoted and delivered with clear milestones.",
   alternates: { canonical: "/services" },
   openGraph: {
-    title: "Services — Bista Creation",
+    title: "Custom Songs & Music Video Services — Bista Creation",
     description:
-      "Custom songs, wedding anthems, cinematic music videos and short-form cuts, produced with Suno AI Pro and Google Flow.",
+      "Custom songs, wedding anthems, cinematic music videos and short-form cuts, produced in Nepal with Suno AI Pro and Google Flow.",
     url: "/services",
   },
 };
@@ -114,8 +118,24 @@ const quoteFactors = [
 export default function ServicesPage() {
   return (
     <main id="main">
+      <JsonLd
+        data={jsonLdGraph([
+          organizationNode(),
+          websiteNode(),
+          serviceCatalogNode(
+            services.map((service) => ({
+              name: service.title,
+              description: service.summary,
+            }))
+          ),
+        ])}
+      />
       <PageHero
         eyebrow="Services"
+        breadcrumb={[
+          { label: "Home", href: "/" },
+          { label: "Services", href: "/services" },
+        ]}
         title={
           <>
             Songs, scored. <span className="nova-text">Videos, directed.</span>

@@ -1,11 +1,24 @@
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
+import { Cinzel, Plus_Jakarta_Sans } from "next/font/google";
 import { FloatingContact } from "@/components/floating-contact";
 import { Footer } from "@/components/footer";
 import { SiteBackdrop } from "@/components/site-backdrop";
 import { SiteHeader } from "@/components/site-header";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-cinzel",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +47,20 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  ...(process.env.GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.GOOGLE_SITE_VERIFICATION } }
+    : {}),
   openGraph: {
     type: "website",
     siteName: "Bista Creation",
@@ -59,7 +86,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${cinzel.variable} ${jakarta.variable}`}>
       <body className="min-h-screen bg-ink-950 font-sans text-silver-300 antialiased">
         <a href="#main" className="skip-link">
           Skip to content
