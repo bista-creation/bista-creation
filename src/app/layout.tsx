@@ -7,6 +7,7 @@ import { SiteBackdrop } from "@/components/site-backdrop";
 import { SiteHeader } from "@/components/site-header";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -98,6 +99,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <Footer />
           <FloatingContact />
         </div>
+        <GoogleAnalytics gaId="G-P7Y0YM055L" />
       </body>
     </html>
   );
