@@ -18,11 +18,10 @@
 1. Open <https://search.google.com/search-console>.
 2. Choose **Add property** → **URL prefix**.
 3. Enter `https://bista-creation.vercel.app/` and continue.
-4. Choose **HTML tag** verification. Copy only the `content` value from the meta tag Google shows.
-5. Add it as a Vercel environment variable named `GOOGLE_SITE_VERIFICATION` for Production, then redeploy. The site already reads this variable in `src/app/layout.tsx`.
-6. Return to Search Console and click **Verify**.
+4. Choose **HTML file** verification. The file Google asks for is already published at `/google24a3e30f3513674c.html`.
+5. Click **Verify**.
 
-Alternative: place the Google HTML verification file in `public/` and redeploy.
+The HTML-tag method is also supported. The `GOOGLE_SITE_VERIFICATION` environment variable is already set in Vercel Production, and `src/app/layout.tsx` renders the meta tag when it is present.
 
 ## Submit the sitemap
 

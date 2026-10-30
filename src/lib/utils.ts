@@ -9,6 +9,8 @@ export function formatDate(iso: string) {
     year: "numeric",
     month: "short",
     day: "numeric",
+    // Fixed timezone keeps server-rendered and hydrated dates identical.
+    timeZone: "Asia/Kathmandu",
   });
 }
 
