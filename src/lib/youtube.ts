@@ -105,35 +105,43 @@ export async function getYouTubeVideos(): Promise<{
     }
   }
 
-  const res = await fetch(YOUTUBE_RSS_URL, { next: { revalidate: 3600 } });
-  const xml = await res.text();
-  const parsed = parser.parse(xml) as Record<string, unknown>;
-  const feed = (parsed?.feed ?? {}) as Record<string, unknown>;
-  const entries = (feed.entry ?? []) as Array<Record<string, unknown>>;
+  try {
+    const res = await fetch(YOUTUBE_RSS_URL, { next: { revalidate: 3600 } });
+    if (res.ok) {
+      const xml = await res.text();
+      const parsed = parser.parse(xml) as Record<string, unknown>;
+      const feed = (parsed?.feed ?? {}) as Record<string, unknown>;
+      const entries = (feed.entry ?? []) as Array<Record<string, unknown>>;
 
-  const items: YouTubeVideo[] = (Array.isArray(entries) ? entries : [entries]).map(
-    (entry) => {
-      const videoId = extractVideoId(entry);
-      const title = text(getChild(entry, "title")) || "Untitled";
-      const published = text(getChild(entry, "published")) || new Date().toISOString();
-      const link = text(getChild(entry, "link"));
-      const isShort = extractIsShort(entry, videoId);
-      const fullUrl = link || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
-      return {
-        id: videoId || title,
-        title,
-        publishedAt: published,
-        videoUrl: fullUrl,
-        isShort,
-        thumbnail: videoId
-          ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
-          : "https://i.ytimg.com/vi/Bista1VideoPlaceholder/hqdefault.jpg",
-      };
+      const items: YouTubeVideo[] = (Array.isArray(entries) ? entries : [entries]).map(
+        (entry) => {
+          const videoId = extractVideoId(entry);
+          const title = text(getChild(entry, "title")) || "Untitled";
+          const published =
+            text(getChild(entry, "published")) || new Date().toISOString();
+          const link = text(getChild(entry, "link"));
+          const isShort = extractIsShort(entry, videoId);
+          const fullUrl =
+            link || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
+          return {
+            id: videoId || title,
+            title,
+            publishedAt: published,
+            videoUrl: fullUrl,
+            isShort,
+            thumbnail: videoId
+              ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+              : "https://i.ytimg.com/vi/Bista1VideoPlaceholder/hqdefault.jpg",
+          };
+        }
+      );
+
+      if (items.length > 0) {
+        return { items, source: "rss", updatedAt: new Date().toISOString() };
+      }
     }
-  );
-
-  if (items.length > 0) {
-    return { items, source: "rss", updatedAt: new Date().toISOString() };
+  } catch {
+    // Network or parser failure — use curated fallback data below.
   }
 
   return {

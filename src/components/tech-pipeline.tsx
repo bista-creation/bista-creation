@@ -1,74 +1,76 @@
-import { AudioLines, Clapperboard, Rocket } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, AudioLines, Clapperboard, Rocket } from "lucide-react";
+import { ProcessSteps } from "@/components/process-steps";
+import { SectionHeading } from "@/components/section-heading";
 
-const steps = [
-  { title: "Brief", text: "Share the song, story, mood or brief." },
-  { title: "Concept & lyrics", text: "We shape the concept and craft the lyrics." },
-  { title: "Production", text: "Suno AI Pro vocals + Google Flow/Veo visuals." },
-  { title: "Film & delivery", text: "Mastering and delivery for YouTube and Instagram." },
+const capabilities = [
+  {
+    title: "Suno AI Pro audio engineering",
+    text: "Multi-genre vocal synthesis, Lok-Pop songwriting and melodic EDM drops, mixed and mastered for release.",
+    icon: AudioLines,
+    tag: "Sound",
+  },
+  {
+    title: "Google Flow & Veo cinematics",
+    text: "Character continuity, 4K upscaling and rhythmic camera language for a visual world that holds together.",
+    icon: Clapperboard,
+    tag: "Vision",
+  },
+  {
+    title: "Mastered release delivery",
+    text: "Complete masters ready for YouTube 16:9, Instagram 9:16 and the platforms that come next.",
+    icon: Rocket,
+    tag: "Delivery",
+  },
 ];
 
 export function TechPipeline() {
   return (
-    <section id="tech" className="relative scroll-mt-20 py-24 sm:py-32">
+    <section id="tech" className="relative scroll-mt-24 section-pad">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl">
-          <p className="text-display text-xs font-semibold tracking-[0.38em] text-gold-400 uppercase">
-            Our Tech
-          </p>
-          <h2 className="mt-4 text-display text-3xl font-bold text-white sm:text-5xl">
-            Built on the best in breed.
-          </h2>
-          <p className="mt-4 text-silver-300">
-            Three disciplines, one studio: AI-assisted songwriting and production,
-            cinematic generation, and delivery-grade mastering.
-          </p>
-        </div>
+        <SectionHeading
+          eyebrow="Our tech & process"
+          title="Built on the best in breed."
+          lede="Three disciplines, one studio: AI-assisted songwriting and production, cinematic generation, and delivery-grade mastering."
+          action={
+            <Link href="/services" className="btn btn-glass btn-sm">
+              Explore services
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          }
+        />
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          <div className="glass rounded-2xl p-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold-500/40 bg-gold-500/10">
-              <AudioLines className="h-5 w-5 text-gold-300" />
-            </div>
-            <p className="mt-6 text-display text-xs font-semibold tracking-[0.3em] text-gold-400">01</p>
-            <h3 className="mt-3 text-xl font-semibold text-white">Suno AI Pro Audio Engineering</h3>
-            <p className="mt-3 text-sm text-silver-400">
-              Multi-genre vocal synthesis with Lok-Pop and Melodic EDM drop mastering.
-            </p>
-          </div>
-
-          <div className="glass rounded-2xl p-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold-500/40 bg-gold-500/10">
-              <Clapperboard className="h-5 w-5 text-gold-300" />
-            </div>
-            <p className="mt-6 text-display text-xs font-semibold tracking-[0.3em] text-gold-400">02</p>
-            <h3 className="mt-3 text-xl font-semibold text-white">Google Flow &amp; Veo Cinematics</h3>
-            <p className="mt-3 text-sm text-silver-400">
-              Character continuity, 4K upscaling, and rhythmic camera cuts for cinematic AI video.
-            </p>
-          </div>
-
-          <div className="glass rounded-2xl p-8">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full border border-gold-500/40 bg-gold-500/10">
-              <Rocket className="h-5 w-5 text-gold-300" />
-            </div>
-            <p className="mt-6 text-display text-xs font-semibold tracking-[0.3em] text-gold-400">03</p>
-            <h3 className="mt-3 text-xl font-semibold text-white">Mastered Release Delivery</h3>
-            <p className="mt-3 text-sm text-silver-400">
-              Complete video mastering ready for YouTube 16:9 and Instagram 9:16.
-            </p>
-          </div>
+          {capabilities.map((capability, index) => {
+            const Icon = capability.icon;
+            return (
+              <div
+                key={capability.title}
+                className="glass liquid-edge glass-hover sheen relative overflow-hidden rounded-3xl p-7"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-gold-400/30 bg-gold-500/10 text-gold-300">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <span className="text-[10px] font-semibold tracking-[0.24em] text-silver-500 uppercase">
+                    {capability.tag} · {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h3 className="mt-6 text-lg font-semibold text-white">{capability.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-silver-400">{capability.text}</p>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((s, i) => (
-            <div key={s.title} className="rounded-2xl border border-white/10 bg-ink-900/70 p-6">
-              <p className="text-display text-xs font-semibold tracking-[0.3em] text-gold-500">
-                {String(i + 1).padStart(2, "0")}
-              </p>
-              <h4 className="mt-3 text-base font-semibold text-white">{s.title}</h4>
-              <p className="mt-2 text-sm text-silver-400">{s.text}</p>
-            </div>
-          ))}
+        <div className="mt-16">
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-display text-xl font-semibold text-white">From brief to release</h3>
+            <p className="text-xs font-semibold tracking-[0.18em] text-silver-500 uppercase">
+              One clear path · milestone delivery
+            </p>
+          </div>
+          <ProcessSteps />
         </div>
       </div>
     </section>

@@ -7,6 +7,7 @@ export function buildWhatsAppMessage(input: {
   vocal?: string;
   deadline?: string;
   lyricsOrStory: string;
+  references?: string;
 }) {
   const lines = [
     `Hi ${site.name}! I would like to commission a custom song.`,
@@ -16,6 +17,7 @@ export function buildWhatsAppMessage(input: {
     input.genre ? `Genre: ${input.genre}` : null,
     input.vocal ? `Vocal delivery: ${input.vocal}` : null,
     input.deadline ? `Target delivery: ${input.deadline}` : null,
+    input.references ? `References: ${input.references}` : null,
     ``,
     `Lyrics / Story concept:`,
     input.lyricsOrStory || "—",

@@ -1,10 +1,24 @@
 import type { MetadataRoute } from "next";
+import { siteUrl } from "@/lib/site";
+
+const routes = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/work", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/services", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/commission", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/about", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/contact", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/privacy", changeFrequency: "yearly", priority: 0.3 },
+  { path: "/terms", changeFrequency: "yearly", priority: 0.3 },
+] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+  const lastModified = new Date();
 
-  return [
-    { url: base, lastModified: new Date(), changeFrequency: "daily", priority: 1 },
-    { url: `${base}/commission`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.8 },
-  ];
+  return routes.map((route) => ({
+    url: `${siteUrl}${route.path === "/" ? "" : route.path}`,
+    lastModified,
+    changeFrequency: route.changeFrequency,
+    priority: route.priority,
+  }));
 }

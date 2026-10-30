@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
+import { Home, RotateCcw } from "lucide-react";
 
 export default function Error({
   error,
@@ -10,36 +10,32 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-6 text-center">
-      <p className="text-display text-6xl text-white sm:text-7xl">Signal lost</p>
-      <h1 className="mt-4 text-display text-2xl text-white sm:text-3xl">
-        Something went wrong while playing this reel.
-      </h1>
-      <p className="mt-4 max-w-md text-sm text-silver-300 sm:text-base">
-        {error?.message ?? "An unexpected error occurred."}
-      </p>
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-        <button
-          onClick={() => reset()}
-          className="rounded-full border border-gold-500/60 bg-gold-500/10 px-6 py-3 text-sm font-semibold text-gold-300 transition hover:bg-gold-500/20"
-        >
-          Try again
-        </button>
-        <Link
-          href="/"
-          className="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-silver-300 transition hover:border-white/30"
-        >
-          Back home
-        </Link>
+    <main className="relative flex min-h-[80vh] items-center justify-center px-4 py-24">
+      <div className="glass liquid-edge w-full max-w-xl rounded-[2rem] p-8 text-center sm:p-12">
+        <p className="text-display text-5xl font-bold text-white sm:text-6xl">Signal lost</p>
+        <h1 className="mt-4 text-display text-2xl font-bold text-balance text-white sm:text-3xl">
+          Something went wrong while playing this reel.
+        </h1>
+        <p className="mx-auto mt-4 max-w-md text-sm leading-relaxed text-silver-300">
+          Try the page again. If it keeps happening, message the studio and we will sort it out.
+        </p>
+        {error?.message ? (
+          <p className="mx-auto mt-4 max-w-md rounded-xl border border-white/10 bg-ink-950/50 px-4 py-3 font-mono text-[11px] break-words text-silver-500">
+            {error.message}
+          </p>
+        ) : null}
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+          <button type="button" onClick={() => reset()} className="btn btn-gold">
+            <RotateCcw className="h-4 w-4" />
+            Try again
+          </button>
+          <Link href="/" className="btn btn-glass">
+            <Home className="h-4 w-4" />
+            Back home
+          </Link>
+        </div>
       </div>
-      {mounted && null}
-    </div>
+    </main>
   );
 }

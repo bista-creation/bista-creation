@@ -49,7 +49,7 @@ export const fallbackYouTubeShorts: YouTubeVideo[] = [
     title: "Oon Ko Sweater | Kafle Remix 🔥🇳🇵 #Shorts #NepaliSong",
     description: "Turn up the volume for this remixed vibe of Oon Ko Sweater / Kafle!",
     publishedAt: "2026-09-20T18:07:25Z",
-    videoUrl: "https://www.youtube.com/shorts/Fyv94XnF0h4",
+    videoUrl: "https://www.youtube.com/shorts/FYv94XnF0h4",
     isShort: true,
     thumbnail: "https://i.ytimg.com/vi/Fyv94XnF0h4/hqdefault.jpg",
   },

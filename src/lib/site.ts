@@ -1,3 +1,7 @@
+export const siteUrl = (
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://bista-creation.vercel.app"
+).replace(/\/+$/, "");
+
 export const site = {
   name: "Bista Creation",
   tagline: "Music Videos • Shorts",
