@@ -28,6 +28,30 @@ function getChild(node: Record<string, unknown>, key: string): unknown {
   return node[key];
 }
 
+function extractLink(entry: Record<string, unknown>): string {
+  const node = getChild(entry, "link");
+  const links = Array.isArray(node) ? node : [node];
+
+  for (const link of links) {
+    if (!link || typeof link !== "object") continue;
+    const record = link as Record<string, unknown>;
+    const href = record["@_href"] ?? record.href;
+    const rel = record["@_rel"] ?? record.rel;
+    if (typeof href === "string" && href.trim() && (rel === undefined || rel === "alternate")) {
+      return href.trim();
+    }
+  }
+
+  return "";
+}
+
+function youtubeUrl(videoId: string, isShort: boolean): string {
+  if (!videoId) return "https://www.youtube.com/@BistaCreationStudio";
+  return isShort
+    ? `https://www.youtube.com/shorts/${videoId}`
+    : `https://www.youtube.com/watch?v=${videoId}`;
+}
+
 function extractVideoId(entry: Record<string, unknown>): string {
   const videoId = getChild(entry, "yt:videoId");
   const fromObject = text(videoId);
@@ -38,10 +62,9 @@ function extractVideoId(entry: Record<string, unknown>): string {
   const match = idText.match(/yt:video:([A-Za-z0-9_-]+)/);
   if (match) return match[1];
 
-  const link = getChild(entry, "link");
-  const linkValue = text(link);
-  const shortMatch = linkValue.match(/shorts\/([A-Za-z0-9_-]+)/);
-  if (shortMatch) return shortMatch[1];
+  const linkValue = extractLink(entry);
+  const linkMatch = linkValue.match(/(?:shorts\/|[?&]v=)([A-Za-z0-9_-]+)/);
+  if (linkMatch) return linkMatch[1];
 
   const title = text(getChild(entry, "title"));
   const idMatch = title.match(/(?:v=|shorts\/)([A-Za-z0-9_-]{6,})/);
@@ -49,8 +72,7 @@ function extractVideoId(entry: Record<string, unknown>): string {
 }
 
 function extractIsShort(entry: Record<string, unknown>, videoId: string): boolean {
-  const link = getChild(entry, "link");
-  const linkValue = text(link);
+  const linkValue = extractLink(entry);
   if (linkValue.includes("/shorts/")) return true;
   const title = text(getChild(entry, "title"));
   if (title.includes("#shorts") || title.includes("#short")) return true;
@@ -81,9 +103,7 @@ export async function getYouTubeVideos(): Promise<{
           const idRecord = entry.id as Record<string, unknown> | undefined;
           const videoId = String(idRecord?.videoId ?? entry.id ?? "");
           const isShort = title.includes("#shorts") || title.includes("#short");
-          const videoUrl = videoId
-            ? `https://www.youtube.com/watch?v=${videoId}`
-            : "https://www.youtube.com/@BistaCreationStudio";
+          const videoUrl = youtubeUrl(videoId, isShort);
           const published = text(snippet.publishedAt) || new Date().toISOString();
           const id = videoId || title;
           return {
@@ -126,10 +146,9 @@ export async function getYouTubeVideos(): Promise<{
           const description = text(mediaGroup["media:description"]) || undefined;
           const published =
             text(getChild(entry, "published")) || new Date().toISOString();
-          const link = text(getChild(entry, "link"));
+          const link = extractLink(entry);
           const isShort = extractIsShort(entry, videoId);
-          const fullUrl =
-            link || (videoId ? `https://www.youtube.com/watch?v=${videoId}` : "");
+          const fullUrl = videoId ? youtubeUrl(videoId, isShort) : link;
           return {
             id: videoId || title,
             title,

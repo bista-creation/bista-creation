@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { CalendarDays, ExternalLink, Play } from "lucide-react";
 import { SectionHeading } from "@/components/section-heading";
+import { useVideoModal } from "@/components/video-modal";
 import { site } from "@/lib/site";
 import type { SocialFeed, YouTubeVideo } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
@@ -36,6 +37,7 @@ export function MediaHub({
   facebookUrl,
 }: Props) {
   const [tab, setTab] = useState<TabId>("all");
+  const { open, modal } = useVideoModal();
 
   const allVideos = [...fullVideos, ...shorts]
     .slice()
@@ -86,12 +88,11 @@ export function MediaHub({
           {visible.length > 0 ? (
             <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {visible.map((video) => (
-                <a
+                <button
                   key={video.id}
-                  href={video.videoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="glass liquid-edge sheen group relative overflow-hidden rounded-3xl text-left transition duration-500 hover:-translate-y-1 hover:border-gold-400/35"
+                  type="button"
+                  onClick={() => open(video)}
+                  className="glass liquid-edge sheen group relative w-full overflow-hidden rounded-3xl text-left transition duration-500 hover:-translate-y-1 hover:border-gold-400/35"
                 >
                   <div className="relative aspect-video w-full overflow-hidden">
                     <Image
@@ -121,7 +122,7 @@ export function MediaHub({
                       {video.title}
                     </h3>
                   </div>
-                </a>
+                </button>
               ))}
             </div>
           ) : (
@@ -285,6 +286,7 @@ export function MediaHub({
           </div>
         </div>
       </div>
+      {modal}
     </section>
   );
 }
