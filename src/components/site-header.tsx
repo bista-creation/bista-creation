@@ -27,10 +27,6 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
@@ -114,6 +110,7 @@ export function SiteHeader() {
                     key={link.href}
                     href={link.href}
                     aria-current={active ? "page" : undefined}
+                    onClick={() => setOpen(false)}
                     className={`flex items-center justify-between rounded-xl px-3 py-3.5 text-sm font-semibold tracking-[0.14em] uppercase transition ${
                       active
                         ? "bg-gold-500/12 text-gold-200"
@@ -127,7 +124,7 @@ export function SiteHeader() {
               })}
             </nav>
             <div className="mt-3 grid gap-2 border-t border-white/10 pt-4">
-              <Link href="/commission" className="btn btn-gold w-full">
+              <Link href="/commission" onClick={() => setOpen(false)} className="btn btn-gold w-full">
                 Start a project
                 <ArrowUpRight className="h-4 w-4" />
               </Link>
@@ -135,6 +132,7 @@ export function SiteHeader() {
                 href={site.whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
                 className="btn btn-glass w-full"
               >
                 Chat on WhatsApp

@@ -6,37 +6,28 @@ import { formatDate } from "@/lib/utils";
 import type { YouTubeVideo } from "@/lib/types";
 
 type Props = {
-  initialVideo?: YouTubeVideo | null;
+  video: YouTubeVideo;
+  onClose: () => void;
 };
 
-export function VideoModal({ initialVideo }: Props) {
-  const [open, setOpen] = useState(Boolean(initialVideo));
-  const [video, setVideo] = useState<YouTubeVideo | null>(initialVideo ?? null);
+export function VideoModal({ video, onClose }: Props) {
   const closeRef = useRef<HTMLButtonElement | null>(null);
 
   useEffect(() => {
-    if (!initialVideo) return;
-    setVideo(initialVideo);
-    setOpen(true);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
 
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(false);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [initialVideo]);
 
-  useEffect(() => {
-    if (open) {
-      closeRef.current?.focus();
-    }
-  }, [open]);
-
-  const close = useCallback(() => {
-    setOpen(false);
-  }, []);
-
-  if (!open || !video) return null;
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
 
   const embedUrl = `https://www.youtube.com/embed/${video.id}?rel=0`;
 
@@ -46,12 +37,12 @@ export function VideoModal({ initialVideo }: Props) {
       role="dialog"
       aria-modal="true"
       aria-label={video.title}
-      onClick={close}
+      onClick={onClose}
     >
       <button
         ref={closeRef}
         type="button"
-        onClick={close}
+        onClick={onClose}
         className="absolute top-4 right-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/5 text-silver-200 transition hover:border-gold-500/60 hover:text-gold-300"
         aria-label="Close video"
       >
@@ -60,7 +51,7 @@ export function VideoModal({ initialVideo }: Props) {
 
       <div
         className="w-full max-w-4xl overflow-hidden rounded-2xl border border-gold-500/25 bg-ink-900 shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
+        onClick={(event) => event.stopPropagation()}
       >
         <div className="relative aspect-video w-full bg-black">
           <iframe
@@ -96,10 +87,12 @@ export function VideoModal({ initialVideo }: Props) {
 export function useVideoModal() {
   const [selected, setSelected] = useState<YouTubeVideo | null>(null);
 
-  const open = useCallback((v: YouTubeVideo) => setSelected(v), []);
+  const open = useCallback((video: YouTubeVideo) => setSelected(video), []);
   const close = useCallback(() => setSelected(null), []);
 
-  const modal = <VideoModal initialVideo={selected} />;
+  const modal = selected ? (
+    <VideoModal key={selected.id} video={selected} onClose={close} />
+  ) : null;
 
   return { selected, open, close, modal };
 }

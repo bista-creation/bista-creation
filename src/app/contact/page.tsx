@@ -41,7 +41,7 @@ export default function ContactPage() {
         eyebrow="Contact"
         title={
           <>
-            Tell us what <span className="nova-text">you're hearing.</span>
+            Tell us what <span className="nova-text">you&apos;re hearing.</span>
           </>
         }
         lede="A voice note, a paragraph, a reference track — start wherever the idea is clearest. Every inquiry gets a real reply from the studio, not an automated funnel."
